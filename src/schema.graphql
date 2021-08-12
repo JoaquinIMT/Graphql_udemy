@@ -1,0 +1,96 @@
+interface Person {
+    _id: ID!
+    name: String!
+    last_name: String!
+    age: Int
+}
+
+union GlobalSerach = Categories | Product
+
+type Admin implements Person {
+    _id: ID!
+    name: String!
+    last_name: String!
+    age: Int
+    email: String!
+    password: String!
+    phone: String!
+}
+
+type Customer implements Person {
+    _id: ID!
+    name: String!
+    last_name: String!
+    age: Int
+    card: String
+    ubication: String
+}
+
+type Category {
+    _id: ID!
+    name: String!
+    photo: String
+    priority: Int
+    products: [Product]
+}
+
+type Product {
+    _id: ID!
+    name: String!
+    description: String
+    photo: String
+}
+
+type Query {
+    "Return all categories"
+    getCategories: [Category]
+    "Return all products from a category"
+    getCategory(id: ID!): [Product]
+    "Return a product description"
+    getProduct(id: ID!): Product
+    "Ejecuta busqueda de todos los productos y categorias"
+    searchItems(keyword: String!): [GlobalSerach]
+}
+
+input CreateAdmin {
+    name: String!
+    last_name: String!
+    age: Int
+    email: String!
+    password: String!
+    phone: String!
+}
+
+input CreateCustomer {
+    name: String!
+    last_name: String!
+    age: Int
+    card: String
+    ubication: String
+}
+
+input CreateCategory {
+    name: String!
+    photo: String
+    priority: Int
+    product: [ID]
+}
+
+input CreateProduct {
+    _id: ID!
+    name: String!
+    description: String
+    photo: String
+    category: ID
+}
+
+type Mutation {
+    "Create an Admin"
+    createAdmin(input: CreateAdmin): Admin
+    "Create a Customer"
+    createCustomer(input: CreateCustomer): Customer
+    "Create Category"
+    createCategory(input:CreateCategory): Category
+    "Create a Product"
+    createProduct(input: CreateProduct): Product
+}
