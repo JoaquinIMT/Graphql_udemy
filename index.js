@@ -3,11 +3,12 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const gqlMiddleware = require('express-graphql')
+const { graphqlHTTP } = require('express-graphql')
 const { makeExecutableSchema } = require('graphql-tools')
 const { readFileSync } = require('fs')
 const { join } = require('path')
 const resolvers = require('./src/resolvers')
+const context = require('./src/db_schemas/index')
 
 const typeDef = readFileSync(
     join( __dirname,'src','schema.graphql'),
@@ -24,10 +25,11 @@ const connectDB =  require('./src/db')
 
 app.use(cors())
 
-app.use('/api',gqlMiddleware({
+app.use('/api',graphqlHTTP({
     schema: schema,
     rootValue: resolvers,
-    graphiql: true
+    graphiql: true,
+    context: context
 }))
 
 app.listen(PORT,()=>{

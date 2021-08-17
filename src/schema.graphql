@@ -5,7 +5,7 @@ interface Person {
     age: Int
 }
 
-union GlobalSerach = Categories | Product
+union GlobalSerach = Category | Product
 
 type Admin implements Person {
     _id: ID!
@@ -50,6 +50,10 @@ type Query {
     getProduct(id: ID!): Product
     "Ejecuta busqueda de todos los productos y categorias"
     searchItems(keyword: String!): [GlobalSerach]
+    "Return all admins"
+    getAdmins: [Admin]
+    "Return all customers"
+    getCustomers: [Customer]
 }
 
 input CreateAdmin {

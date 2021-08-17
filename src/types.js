@@ -2,7 +2,7 @@
 
 module.exports = {
     Category: {
-        product: async ({product}) => {
+        products: async ({product}) => {
             
         }
     }
