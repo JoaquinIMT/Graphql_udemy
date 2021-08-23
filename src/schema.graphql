@@ -1,5 +1,5 @@
 interface Person {
-    _id: ID!
+    id: ID!
     name: String!
     last_name: String!
     age: Int
@@ -8,7 +8,7 @@ interface Person {
 union GlobalSerach = Category | Product
 
 type Admin implements Person {
-    _id: ID!
+    id: ID!
     name: String!
     last_name: String!
     age: Int
@@ -18,7 +18,7 @@ type Admin implements Person {
 }
 
 type Customer implements Person {
-    _id: ID!
+    id: ID!
     name: String!
     last_name: String!
     age: Int
@@ -27,7 +27,7 @@ type Customer implements Person {
 }
 
 type Category {
-    _id: ID!
+    id: ID!
     name: String!
     photo: String
     priority: Int
@@ -35,7 +35,7 @@ type Category {
 }
 
 type Product {
-    _id: ID!
+    id: ID!
     name: String!
     description: String
     photo: String
@@ -52,6 +52,8 @@ type Query {
     searchItems(keyword: String!): [GlobalSerach]
     "Return all admins"
     getAdmins: [Admin]
+    "Return an specific admin"
+    getAdmin(id: ID!): Admin
     "Return all customers"
     getCustomers: [Customer]
 }
@@ -81,11 +83,19 @@ input CreateCategory {
 }
 
 input CreateProduct {
-    _id: ID!
     name: String!
     description: String
     photo: String
     category: ID
+}
+
+input EditAdmin {
+    name: String
+    last_name: String
+    age: Int
+    email: String
+    password: String
+    phone: String
 }
 
 type Mutation {
@@ -97,4 +107,8 @@ type Mutation {
     createCategory(input:CreateCategory): Category
     "Create a Product"
     createProduct(input: CreateProduct): Product
+    "Edit an Admin"
+    editAdmin(id: ID!, input: EditAdmin): Admin
+    "Delete an Admin"
+    deleteAdmin(id: ID!): Boolean
 }

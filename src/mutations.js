@@ -1,5 +1,5 @@
 'use strict'
-
+const {handler} = require('./error_handler')
 const assign = (defaultObject, input) => Object.assign(defaultObject, input)
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
         const adminDefault = {
             age: 0
         }
-        const newAdmin = await new Admin(assign(adminDefault, input))
+        const newAdmin = await Admin.create( assign(adminDefault, input)).catch(handler) 
         return newAdmin        
     },
     createCustomer: async (root,{input}, {Customer}) => {
@@ -36,4 +36,12 @@ module.exports = {
         const newProduct = await new Product(assign(productDefault, input))
         return newProduct
     },
+    deleteAdmin: async (root, {id}, {Admin}) => {
+        const deletedAdmin = await Admin.delete(id)
+        return deletedAdmin
+    },
+    editAdmin: async (root, {id,input}, {Admin}) => {
+        
+        const editedAdmin =  Admin.edit(assign(input))
+    }
 }

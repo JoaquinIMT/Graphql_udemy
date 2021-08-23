@@ -6,9 +6,9 @@ const Category = require('./Category')
 const Product = require('./Product')
 
 const schema = {
-    Admin,
+    Admin: Admin,
     Customer,
-    Category,
+    Category: Category,
     Product
 }
 

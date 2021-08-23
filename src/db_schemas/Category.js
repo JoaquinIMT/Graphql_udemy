@@ -1,23 +1,25 @@
 'use strict'
 
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-const Product = require('./Product')
+const Pool = require('pg').Pool
+const pool = new Pool()
 
-const categorySchema = new Schema({
-    name: {
-        type: String,
-        require: true
+module.exports =  {
+    getAll : () => {
+        pool.query('SELECT * FROM categories ORDER BY id ASC', (err, res) => {
+            if(err){
+                throw err
+            }
+            return res.rows
+        })
     },
-    photo: {
-        type: String
-    },
-    priority: {
-        type: Number
-    },
-    products: {
-        type: [Product.Schema]
+    create : (args) => {
+        pool.query('INSERT INTO categories (name,photo,priority,products) VALUES ($1,$2,$3,$4) RETURNING *',
+        args,
+        (err, res) => {
+            if(err){
+                throw err
+            }
+            return res.rows[0]
+        })
     }
-})
-
-module.exports = mongoose.model('Category', categorySchema)
+}

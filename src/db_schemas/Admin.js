@@ -1,33 +1,29 @@
 'use strict'
 
-const mongoose = require('mongoose')
+const {DATABASE_URL} = process.env
+const Pool = require('pg').Pool
+const pool = new Pool({connectionString: DATABASE_URL,})
 
-const Schema = mongoose.Schema
-
-const adminSchema = new Schema({
-    name: {
-        type: String,
-        required: true
+module.exports =  {
+    getAll : async () => {
+        const {rows} = await pool.query('SELECT * FROM admins ORDER BY id ASC')
+        return rows
     },
-    last_name: {
-        type: String,
-        required: true
+    getById: async (id) => {
+        const {rows} = await pool.query('SELECT * FROM admins WHERE id=$1',[id])
+        return rows[0]
     },
-    age: {
-        type: Number
+    create : async ({name, last_name, age, email, password, phone}) => {
+        const { rows } = await pool.query('INSERT INTO admins (name,last_name,age,email,password,phone) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *',
+        [name, last_name, age, email, password, phone])
+        return rows[0]
     },
-    email: {
-        type: String,
-        required: true
+    delete : async (id) => {
+        const {rowCount} = await pool.query('DELETE FROM admins WHERE id=$1',[id])
+        return rowCount>0
     },
-    password: {
-        type: String,
-        required: true
-    },
-    phone: {
-        type: String,
-        required: true
+    edit : async (id, {name, last_name, age, email, password, phone}) => {
+        
     }
-})
 
-module.exports = mongoose.model('Admin', adminSchema)
+}

@@ -1,5 +1,7 @@
 'use strict'
 
+const Admin = require("./db_schemas/Admin")
+
 module.exports = {
     getCategories: async (root,args, {Category}) => {
         const categories = await Category.find({})
@@ -15,9 +17,11 @@ module.exports = {
 
     },
     getAdmins: async (root,args,{Admin}) => {
-        const adminTest = [{_id:"aaasdas", name: "asdasd", last_name:"asdasd", age:0,email:"asdas",password:"aa",phone:"aaaaddd"}]
-        const admins = await Admin.find()
-        console.log(admins)
+        const admins = await Admin.getAll()
         return admins
+    },
+    getAdmin: async (root, { id }, {Admin}) => {
+        const admin = await Admin.getById(id)
+        return admin
     }
 }
